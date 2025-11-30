@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دخول مدير المتجر - السلطان</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a0a0a;
+            --primary-gold: #9d8b5c;
+            --gold-light: #b5a878;
+            --gold-dark: #7a6d47;
+            --secondary-gray: #1a1a1a;
+            --text-light: #ffffff;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-gray) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(157, 139, 92, 0.2);
+            padding: 3rem;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(157, 139, 92, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--primary-gold);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+
+        .login-header p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-gold);
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(157, 139, 92, 0.3);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(157, 139, 92, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: #666;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--gold-light) 100%);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(157, 139, 92, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(157, 139, 92, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--gold-light);
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background-color: rgba(139, 0, 0, 0.2);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .success-message {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+
+            .login-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🏆 السلطان</h1>
+            <p>دخول مدير المتجر</p>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" name="username" placeholder="أدخل اسم المستخدم" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+            </div>
+
+            <button type="submit" class="login-btn">دخول</button>
+        </form>
+
+        <div class="back-link">
+            <a href="index.html">العودة للصفحة الرئيسية</a>
+        </div>
+    </div>
+
+    <script>
+        // بيانات المدير الافتراضية
+        const MANAGER_USERNAME = "admin";
+        const MANAGER_PASSWORD = "sultan123";
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-message');
+            const successMsg = document.getElementById('success-message');
+
+            // إخفاء الرسائل
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // التحقق من بيانات الدخول
+            if (username === MANAGER_USERNAME && password === MANAGER_PASSWORD) {
+                // حفظ جلسة المدير
+                localStorage.setItem('manager_logged_in', 'true');
+                localStorage.setItem('manager_username', username);
+
+                // عرض رسالة النجاح
+                successMsg.textContent = 'تم الدخول بنجاح! جاري التوجيه...';
+                successMsg.style.display = 'block';
+
+                // التوجيه إلى لوحة التحكم بعد ثانية واحدة
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
+            } else {
+                // عرض رسالة الخطأ
+                errorMsg.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة!';
+                errorMsg.style.display = 'block';
+
+                // مسح حقول الإدخال
+                document.getElementById('password').value = '';
+            }
+        }
+
+        // التحقق من تسجيل الدخول عند فتح الصفحة
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('manager_logged_in') === 'true') {
+                window.location.href = 'admin.html';
+            }
+        });
+    </script>
+</body>
+</html>

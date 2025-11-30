@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - السلطان</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🏆 السلطان</h2>
+                <p>لوحة التحكم</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <button class="menu-item active" onclick="switchTab('dashboard')">
+                    📊 لوحة المعلومات
+                </button>
+                <button class="menu-item" onclick="switchTab('products')">
+                    📦 المنتجات
+                </button>
+                <button class="menu-item" onclick="switchTab('add-product')">
+                    ➕ إضافة منتج
+                </button>
+            </nav>
+
+            <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1>لوحة التحكم</h1>
+                <p>مرحباً بك في إدارة متجر السلطان</p>
+            </header>
+
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <h2>لوحة المعلومات</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>إجمالي المنتجات</h3>
+                        <p class="stat-value" id="total-products">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>المنتجات المتاحة</h3>
+                        <p class="stat-value" id="available-products">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>إجمالي القيمة</h3>
+                        <p class="stat-value" id="total-value">0 ل.س</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Tab -->
+            <section id="products" class="tab-content">
+                <div class="section-header">
+                    <h2>إدارة المنتجات</h2>
+                    <button class="btn btn-primary" onclick="switchTab('add-product')">➕ إضافة منتج جديد</button>
+                </div>
+                <div id="products-list" class="products-table">
+                    <p style="text-align: center; padding: 2rem;">جاري تحميل المنتجات...</p>
+                </div>
+            </section>
+
+            <!-- Add Product Tab -->
+            <section id="add-product" class="tab-content">
+                <h2>إضافة منتج جديد</h2>
+                <form id="product-form" class="product-form">
+                    <div class="form-group">
+                        <label for="product-name">اسم المنتج *</label>
+                        <input type="text" id="product-name" required placeholder="مثال: إطار ميشلان">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-description">الوصف</label>
+                        <textarea id="product-description" rows="3" placeholder="وصف المنتج..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-size">الحجم</label>
+                            <input type="text" id="product-size" placeholder="مثال: 205/55R16">
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">السعر *</label>
+                            <input type="number" id="product-price" required min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="product-quantity">الكمية</label>
+                            <input type="number" id="product-quantity" min="0" value="0" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">صورة المنتج</label>
+                        <input type="file" id="product-image" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">💾 حفظ المنتج</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // التحقق من تسجيل الدخول
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('manager_logged_in') !== 'true') {
+                window.location.href = 'manager-login.html';
+            }
+            loadProducts();
+            updateDashboard();
+            
+            // تحديث البيانات كل 5 ثواني
+            setInterval(() => {
+                loadProducts();
+                updateDashboard();
+            }, 5000);
+        });
+
+        // التبديل بين الأقسام
+        function switchTab(tabName) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إظهار القسم المختار
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // تحديث الزر النشط
+            document.querySelectorAll('.menu-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+                localStorage.removeItem('manager_logged_in');
+                localStorage.removeItem('manager_username');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // تحميل المنتجات
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) {
+                    throw new Error(`خطأ HTTP: ${response.status}`);
+                }
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('خطأ في تحميل المنتجات:', error);
+                const list = document.getElementById('products-list');
+                if (list) {
+                    list.innerHTML = '<p style="color: red; text-align: center; padding: 2rem;">خطأ في تحميل المنتجات. تأكد من أن الخادم يعمل.</p>';
+                }
+            }
+        }
+
+        // عرض المنتجات
+        function displayProducts(products) {
+            const list = document.getElementById('products-list');
+            
+            if (!products || products.length === 0) {
+                list.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">لا توجد منتجات حالياً</p>';
+                return;
+            }
+
+            let html = '<table class="products-table-content"><thead><tr><th>الاسم</th><th>الحجم</th><th>السعر</th><th>الكمية</th><th>الإجراءات</th></tr></thead><tbody>';
+            
+            products.forEach(product => {
+                const name = product.name || 'بدون اسم';
+                const size = product.size || '-';
+                const price = product.price || 0;
+                const quantity = product.quantity || 0;
+                const id = product.id || '';
+                
+                html += `
+                    <tr>
+                        <td>${name}</td>
+                        <td>${size}</td>
+                        <td>${price} ل.س</td>
+                        <td>${quantity}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${id}')">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            list.innerHTML = html;
+        }
+
+        // تحديث لوحة المعلومات
+        async function updateDashboard() {
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) {
+                    throw new Error(`خطأ HTTP: ${response.status}`);
+                }
+                const products = await response.json();
+                
+                const totalProductsEl = document.getElementById('total-products');
+                const availableProductsEl = document.getElementById('available-products');
+                const totalValueEl = document.getElementById('total-value');
+                
+                if (totalProductsEl) totalProductsEl.textContent = products.length || 0;
+                if (availableProductsEl) availableProductsEl.textContent = products.filter(p => (p.quantity || 0) > 0).length || 0;
+                
+                if (totalValueEl) {
+                    const totalValue = products.reduce((sum, p) => sum + ((p.price || 0) * (p.quantity || 0)), 0);
+                    totalValueEl.textContent = totalValue.toLocaleString('ar-SA') + ' ل.س';
+                }
+            } catch (error) {
+                console.error('خطأ في تحديث لوحة المعلومات:', error);
+            }
+        }
+
+        // معاينة الصورة
+        const imageInput = document.getElementById('product-image');
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const preview = document.getElementById('image-preview');
+                        if (preview) {
+                            preview.innerHTML = `<img src="${event.target.result}" alt="معاينة">`;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // إضافة منتج
+        const productForm = document.getElementById('product-form');
+        if (productForm) {
+            productForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                let image = null;
+                const imageFile = document.getElementById('product-image').files[0];
+                if (imageFile) {
+                    image = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (event) => resolve(event.target.result);
+                        reader.readAsDataURL(imageFile);
+                    });
+                }
+
+                const product = {
+                    name: document.getElementById('product-name').value,
+                    description: document.getElementById('product-description').value,
+                    size: document.getElementById('product-size').value,
+                    price: parseFloat(document.getElementById('product-price').value) || 0,
+                    quantity: parseInt(document.getElementById('product-quantity').value) || 0,
+                    image: image
+                };
+
+                try {
+                    const response = await fetch('/api/products', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(product)
+                    });
+
+                    if (response.ok) {
+                        alert('✅ تم إضافة المنتج بنجاح');
+                        this.reset();
+                        document.getElementById('image-preview').innerHTML = '';
+                        loadProducts();
+                        updateDashboard();
+                        switchTab('products');
+                    } else {
+                        alert('❌ حدث خطأ في إضافة المنتج');
+                    }
+                } catch (error) {
+                    console.error('خطأ في إضافة المنتج:', error);
+                    alert('❌ حدث خطأ في إضافة المنتج');
+                }
+            });
+        }
+
+        // حذف منتج
+        async function deleteProduct(id) {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                try {
+                    const response = await fetch(`/api/products/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        alert('✅ تم حذف المنتج بنجاح');
+                        loadProducts();
+                        updateDashboard();
+                    } else {
+                        alert('❌ حدث خطأ في حذف المنتج');
+                    }
+                } catch (error) {
+                    console.error('خطأ في حذف المنتج:', error);
+                    alert('❌ حدث خطأ في حذف المنتج');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

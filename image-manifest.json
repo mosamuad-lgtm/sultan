@@ -1,0 +1,198 @@
+{
+  "manifest": {
+    "version": "1.0",
+    "lastUpdated": "2025-11-30",
+    "store": "السلطان",
+    "description": "قائمة الصور المستخدمة في الموقع"
+  },
+  "hero": {
+    "folder": "images/hero/",
+    "description": "صور البطل والخلفيات الرئيسية",
+    "images": [
+      {
+        "name": "hero-banner.jpg",
+        "description": "صورة البطل الرئيسية للصفحة الرئيسية",
+        "dimensions": "1920x1080",
+        "size": "500KB",
+        "usage": "الجزء العلوي من الصفحة الرئيسية"
+      },
+      {
+        "name": "hero-tires.png",
+        "description": "صورة الإطارات الفاخرة",
+        "dimensions": "1920x1080",
+        "size": "400KB",
+        "usage": "خلفية قسم الإطارات"
+      },
+      {
+        "name": "hero-background.jpg",
+        "description": "خلفية عامة للصفحة",
+        "dimensions": "1920x1080",
+        "size": "300KB",
+        "usage": "خلفية الصفحات الداخلية"
+      }
+    ]
+  },
+  "products": {
+    "folder": "images/products/",
+    "description": "صور المنتجات",
+    "images": [
+      {
+        "name": "michelin-tire.jpg",
+        "description": "إطار ميشلان",
+        "dimensions": "400x400",
+        "size": "150KB",
+        "usage": "عرض المنتج في الصفحة الرئيسية ولوحة التحكم"
+      },
+      {
+        "name": "bridgestone-tire.jpg",
+        "description": "إطار بريدجستون",
+        "dimensions": "400x400",
+        "size": "150KB",
+        "usage": "عرض المنتج في الصفحة الرئيسية ولوحة التحكم"
+      },
+      {
+        "name": "continental-tire.jpg",
+        "description": "إطار كونتيننتال",
+        "dimensions": "400x400",
+        "size": "150KB",
+        "usage": "عرض المنتج في الصفحة الرئيسية ولوحة التحكم"
+      },
+      {
+        "name": "default-product.jpg",
+        "description": "صورة افتراضية للمنتجات",
+        "dimensions": "400x400",
+        "size": "100KB",
+        "usage": "عرض المنتجات بدون صور"
+      }
+    ]
+  },
+  "services": {
+    "folder": "images/services/",
+    "description": "صور الخدمات",
+    "images": [
+      {
+        "name": "tire-installation.jpg",
+        "description": "تركيب الإطارات",
+        "dimensions": "600x400",
+        "size": "250KB",
+        "usage": "قسم الخدمات في الصفحة الرئيسية"
+      },
+      {
+        "name": "tire-repair.jpg",
+        "description": "إصلاح الإطارات",
+        "dimensions": "600x400",
+        "size": "250KB",
+        "usage": "قسم الخدمات في الصفحة الرئيسية"
+      },
+      {
+        "name": "tire-rotation.jpg",
+        "description": "توازن الإطارات",
+        "dimensions": "600x400",
+        "size": "250KB",
+        "usage": "قسم الخدمات في الصفحة الرئيسية"
+      },
+      {
+        "name": "delivery-service.jpg",
+        "description": "خدمة التوصيل",
+        "dimensions": "600x400",
+        "size": "250KB",
+        "usage": "قسم الخدمات في الصفحة الرئيسية"
+      },
+      {
+        "name": "quality-assurance.jpg",
+        "description": "ضمان الجودة",
+        "dimensions": "600x400",
+        "size": "250KB",
+        "usage": "قسم الخدمات في الصفحة الرئيسية"
+      }
+    ]
+  },
+  "icons": {
+    "folder": "images/icons/",
+    "description": "الأيقونات والرموز",
+    "images": [
+      {
+        "name": "phone-icon.svg",
+        "description": "أيقونة الهاتف",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "معلومات الاتصال"
+      },
+      {
+        "name": "email-icon.svg",
+        "description": "أيقونة البريد الإلكتروني",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "معلومات الاتصال"
+      },
+      {
+        "name": "location-icon.svg",
+        "description": "أيقونة الموقع",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "معلومات الموقع"
+      },
+      {
+        "name": "truck-icon.svg",
+        "description": "أيقونة الشاحنة",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "خدمة التوصيل"
+      },
+      {
+        "name": "star-icon.svg",
+        "description": "أيقونة النجمة",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "التقييمات والمميزات"
+      },
+      {
+        "name": "check-icon.svg",
+        "description": "أيقونة التحقق",
+        "dimensions": "64x64",
+        "size": "5KB",
+        "usage": "علامات الاختيار والتأكيد"
+      },
+      {
+        "name": "logo.svg",
+        "description": "شعار المتجر",
+        "dimensions": "200x200",
+        "size": "20KB",
+        "usage": "رأس الصفحة والتذييل"
+      }
+    ]
+  },
+  "guidelines": {
+    "colors": {
+      "primary_dark": "#0a0a0a",
+      "primary_gold": "#9d8b5c",
+      "secondary_gray": "#1a1a1a",
+      "text_light": "#ffffff",
+      "text_dark": "#0a0a0a"
+    },
+    "aspectRatios": {
+      "hero": "16:9",
+      "products": "1:1",
+      "services": "3:2",
+      "icons": "1:1"
+    },
+    "quality": {
+      "dpi": 300,
+      "compression": "lossless",
+      "format": ["JPG", "PNG", "SVG"]
+    },
+    "maxSizes": {
+      "hero": "1MB",
+      "products": "500KB",
+      "services": "500KB",
+      "icons": "100KB"
+    }
+  },
+  "notes": {
+    "note1": "جميع الصور يجب أن تكون عالية الجودة",
+    "note2": "استخدم الألوان المحددة في الدليل",
+    "note3": "قم بضغط الصور قبل الرفع",
+    "note4": "استخدم صور ذات حقوق ملكية أو مرخصة",
+    "note5": "حدّث هذا الملف عند إضافة صور جديدة"
+  }
+}

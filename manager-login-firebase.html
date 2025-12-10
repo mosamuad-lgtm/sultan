@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - السلطان</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #9d8b5c;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #9d8b5c;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #9d8b5c 0%, #7a6d47 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(157, 139, 92, 0.3);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            color: #999;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .firebase-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .firebase-btn:hover {
+            border-color: #9d8b5c;
+            background: #f5f5f5;
+        }
+
+        .firebase-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #9d8b5c;
+            font-size: 14px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #9d8b5c;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #9d8b5c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🏆 السلطان</h1>
+            <p>متجر الإطارات الفاخر</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" required placeholder="أدخل بريدك الإلكتروني">
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" name="password" required placeholder="أدخل كلمة المرور">
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">تسجيل الدخول</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>جاري تسجيل الدخول...</p>
+            </div>
+        </form>
+
+        <div class="divider">
+            <span>أو</span>
+        </div>
+
+        <button class="firebase-btn" id="firebaseLoginBtn">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFA500' d='M3 13.5v8.25h5.25V13.5H3z'/%3E%3Cpath fill='%23F57C00' d='M10.5 13.5v8.25H15.75V13.5H10.5z'/%3E%3Cpath fill='%23FB8C00' d='M18 13.5v8.25h3v-8.25h-3z'/%3E%3Cpath fill='%23FFCA28' d='M3 3v8.25h5.25V3H3z'/%3E%3Cpath fill='%23FBC02D' d='M10.5 3v8.25H15.75V3H10.5z'/%3E%3Cpath fill='%23F57F17' d='M18 3v8.25h3V3h-3z'/%3E%3C/svg%3E" alt="Firebase">
+            تسجيل دخول عبر Firebase
+        </button>
+
+        <div class="register-link">
+            ليس لديك حساب؟ <a href="manager-register-firebase.html">إنشاء حساب جديد</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-auth.js";
+
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsb_A_YmaPqfCTCv4O1Vanl2kl1b9ooJo",
+            authDomain: "sultan-f08bb.firebaseapp.com",
+            projectId: "sultan-f08bb",
+            storageBucket: "sultan-f08bb.firebasestorage.app",
+            messagingSenderId: "490818414636",
+            appId: "1:490818414636:web:5478d9a521ec49ebb3c989",
+            measurementId: "G-WLZD2LK8WK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // عناصر الصفحة
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const firebaseLoginBtn = document.getElementById('firebaseLoginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loading = document.getElementById('loading');
+
+        // دالة لعرض الرسائل
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        // تسجيل الدخول بالبريد الإلكتروني وكلمة المرور
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            loading.style.display = 'block';
+            loginBtn.disabled = true;
+
+            try {
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const idToken = await userCredential.user.getIdToken();
+
+                // إرسال Token إلى الخادم
+                const response = await fetch('/api/auth/firebase/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${idToken}`
+                    },
+                    body: JSON.stringify({ firebaseToken: userCredential.user.uid })
+                });
+
+                if (response.ok) {
+                    showSuccess('تم تسجيل الدخول بنجاح!');
+                    localStorage.setItem('firebaseToken', idToken);
+                    setTimeout(() => {
+                        window.location.href = '/admin.html';
+                    }, 1500);
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'حدث خطأ في تسجيل الدخول');
+                }
+            } catch (error) {
+                showError(error.message || 'حدث خطأ في تسجيل الدخول');
+            } finally {
+                loading.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+
+        // تسجيل الدخول عبر Google
+        firebaseLoginBtn.addEventListener('click', async () => {
+            hideMessages();
+            loading.style.display = 'block';
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const idToken = await result.user.getIdToken();
+
+                // إرسال Token إلى الخادم
+                const response = await fetch('/api/auth/firebase/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${idToken}`
+                    },
+                    body: JSON.stringify({ firebaseToken: result.user.uid })
+                });
+
+                if (response.ok) {
+                    showSuccess('تم تسجيل الدخول بنجاح!');
+                    localStorage.setItem('firebaseToken', idToken);
+                    setTimeout(() => {
+                        window.location.href = '/admin.html';
+                    }, 1500);
+                } else {
+                    const error = await response.json();
+                    showError(error.error || 'حدث خطأ في تسجيل الدخول');
+                }
+            } catch (error) {
+                showError(error.message || 'حدث خطأ في تسجيل الدخول');
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

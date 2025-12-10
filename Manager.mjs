@@ -3,6 +3,12 @@ import bcryptjs from 'bcryptjs';
 
 const managerSchema = new mongoose.Schema(
     {
+        firebaseUID: {
+            type: String,
+            unique: true,
+            sparse: true,
+            default: null
+        },
         username: {
             type: String,
             required: [true, 'اسم المستخدم مطلوب'],
@@ -41,6 +47,11 @@ const managerSchema = new mongoose.Schema(
             type: Date,
             default: null
         },
+        authMethod: {
+            type: String,
+            enum: ['local', 'firebase'],
+            default: 'local'
+        },
         createdAt: {
             type: Date,
             default: Date.now
@@ -56,10 +67,10 @@ const managerSchema = new mongoose.Schema(
     }
 );
 
-// تشفير كلمة المرور قبل الحفظ
+// تشفير كلمة المرور قبل الحفظ (للمصادقة المحلية فقط)
 managerSchema.pre('save', async function(next) {
-    // إذا لم تتم تعديل كلمة المرور، تابع
-    if (!this.isModified('password')) {
+    // إذا كان المستخدم يستخدم Firebase، لا تشفر كلمة المرور
+    if (this.authMethod === 'firebase' || !this.isModified('password')) {
         return next();
     }
 
